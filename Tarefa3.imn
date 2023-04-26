@@ -1,0 +1,367 @@
+node n1 {
+    type router
+    model host
+    network-config {
+	hostname Servidor
+	!
+	interface eth0
+	 ip address 192.0.2.10/24
+	!
+    }
+    canvas c1
+    iconcoords {53.0 213.0}
+    labelcoords {53.0 245.0}
+    interface-peer {eth0 n2}
+    custom-config {
+	custom-config-id service:UserDefined
+	custom-command UserDefined
+	config {
+	files=('Mymicroempresa.html', )
+	cmdup=('python -m SimpleHTTPServer 80', )
+	meta=Servidor
+	}
+    }
+    custom-config {
+	custom-config-id service:UserDefined:Mymicroempresa.html
+	custom-command Mymicroempresa.html
+	config {
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <title>Minha Microempresa de Suporte e Consultoria em TI</title>
+	  </head>
+	
+	  <body>
+	    <h1>Sobre a Microempresa</h1>
+	    <p>Somos a Help Soluções em TI. Visamos disponibilizar serviços de suporte econsultoria em TI de qualidade tanto para outras empresas quanto para variados indivíduos. Contamos com um time de colaboradores bastante preparado e disponibilizamos para o cliente a opção de atendimento remoto que pode ser uma boa função para ele.</p>
+	
+	    <h2>Serviços</h2>
+	    <ul>
+	      <li>Suporte técnico para hardware e software</li>
+	      <li>Formatação e backup de arquivos</li>
+	      <li>Desenvolvimento de Páginas Web</li>
+	      <li>Consultoria em TI</li>
+	    </ul>
+	
+	    <h2>Para mais informações:</h2>
+	    <address>
+	      <p>Telefone: (79) 99630-5283<br>
+	         E-mail: helpsolucoesemti@gmail.com</p>
+	    </address>
+	  </body>
+	</html>
+	}
+    }
+    services {DefaultRoute SSH UserDefined}
+}
+
+node n3 {
+    type lanswitch
+    network-config {
+	hostname Switch (8 portas)
+	!
+    }
+    canvas c1
+    iconcoords {341.0 185.0}
+    labelcoords {341.0 209.0}
+    interface-peer {e1 n4}
+    interface-peer {e2 n5}
+    interface-peer {e3 n6}
+    interface-peer {e4 n7}
+    interface-peer {e5 n8}
+    interface-peer {e0 n2}
+}
+
+node n4 {
+    type router
+    model PC
+    network-config {
+	hostname sup01
+	!
+	interface eth0
+	 ip address 192.0.3.20/24
+	!
+    }
+    canvas c1
+    iconcoords {532.0 49.0}
+    labelcoords {532.0 81.0}
+    interface-peer {eth0 n3}
+}
+
+node n5 {
+    type router
+    model PC
+    network-config {
+	hostname sup02
+	!
+	interface eth0
+	 ip address 192.0.3.21/24
+	!
+    }
+    canvas c1
+    iconcoords {566.0 127.0}
+    labelcoords {566.0 159.0}
+    interface-peer {eth0 n3}
+}
+
+node n6 {
+    type router
+    model PC
+    network-config {
+	hostname sup03
+	!
+	interface eth0
+	 ip address 192.0.3.22/24
+	!
+    }
+    canvas c1
+    iconcoords {569.0 229.0}
+    labelcoords {569.0 261.0}
+    interface-peer {eth0 n3}
+}
+
+node n7 {
+    type router
+    model PC
+    network-config {
+	hostname ger01
+	!
+	interface eth0
+	 ip address 192.0.3.23/24
+	!
+    }
+    canvas c1
+    iconcoords {220.0 332.0}
+    labelcoords {220.0 364.0}
+    interface-peer {eth0 n3}
+}
+
+node n8 {
+    type router
+    model PC
+    network-config {
+	hostname mark01
+	!
+	interface eth0
+	 ip address 192.0.3.24/24
+	!
+    }
+    canvas c1
+    iconcoords {432.0 332.0}
+    labelcoords {432.0 364.0}
+    interface-peer {eth0 n3}
+}
+
+node n2 {
+    type router
+    model router
+    network-config {
+	hostname Roteador
+	!
+	interface eth1
+	 ip address 192.0.3.1/24
+	!
+	interface eth0
+	 ip address 192.0.2.1/24
+	!
+    }
+    canvas c1
+    iconcoords {212.0 138.0}
+    labelcoords {212.0 170.0}
+    interface-peer {eth0 n1}
+    interface-peer {eth1 n3}
+}
+
+node n9 {
+    type wlan
+    network-config {
+	hostname Internet
+	!
+	interface wireless
+	 ip address 192.0.4.0/32
+	 ipv6 address 2001:db8:0::0/128
+	!
+	mobmodel
+	coreapi
+	basic_range
+	!
+    }
+    custom-config {
+	custom-config-id basic_range
+	custom-command {3 3 9 9 9}
+	config {
+	range=275
+	bandwidth=54000000
+	jitter=0
+	delay=20000
+	error=0
+	}
+    }
+    canvas c1
+    iconcoords {55.0 47.0}
+    labelcoords {55.0 79.0}
+}
+
+link l3 {
+    nodes {n3 n4}
+    bandwidth 0
+}
+
+link l4 {
+    nodes {n3 n5}
+    bandwidth 0
+}
+
+link l5 {
+    nodes {n3 n6}
+    bandwidth 0
+}
+
+link l6 {
+    nodes {n3 n7}
+    bandwidth 0
+}
+
+link l7 {
+    nodes {n3 n8}
+    bandwidth 0
+}
+
+link l1 {
+    nodes {n1 n2}
+    bandwidth 0
+}
+
+link l2 {
+    nodes {n2 n3}
+    bandwidth 0
+}
+
+annotation a2 {
+    iconcoords {341.0 32.0}
+    type text
+    label {}
+    labelcolor black
+    fontfamily {Arial}
+    fontsize {12}
+    effects {bold}
+    canvas c1
+}
+
+annotation a3 {
+    type text
+    iconcoords {451.0 24.0}
+    label {}
+    canvas c1
+}
+
+annotation a4 {
+    type text
+    iconcoords {78.0 205.0}
+    label {}
+    canvas c1
+}
+
+annotation a6 {
+    type text
+    iconcoords {372.0 207.0}
+    label {}
+    canvas c1
+}
+
+annotation a7 {
+    type text
+    iconcoords {382.0 201.0}
+    label {}
+    canvas c1
+}
+
+annotation a8 {
+    type text
+    iconcoords {318.0 218.0}
+    label {}
+    canvas c1
+}
+
+annotation a5 {
+    type text
+    iconcoords {334.0 175.0}
+    label {}
+    canvas c1
+}
+
+annotation a9 {
+    iconcoords {109.0 66.0 165.0 94.0}
+    type rectangle
+    label {}
+    labelcolor black
+    fontfamily {Arial}
+    fontsize 12
+    color #c01000
+    width 0
+    border black
+    rad 11
+    canvas c1
+}
+
+annotation a11 {
+    type text
+    iconcoords {192.0 115.0}
+    label {}
+    canvas c1
+}
+
+annotation a10 {
+    iconcoords {113.0 104.0}
+    type text
+    label {Firewall}
+    labelcolor #003c9e
+    fontfamily {Arial}
+    fontsize 10
+    canvas c1
+}
+
+annotation a12 {
+    type text
+    iconcoords {337.0 42.0}
+    label {}
+    canvas c1
+}
+
+annotation a1 {
+    iconcoords {227.0 60.0}
+    type text
+    label {REDE LOCAL (LAN)}
+    labelcolor #bc0000
+    fontfamily {Arial}
+    fontsize 12
+    canvas c1
+}
+
+annotation a13 {
+    type text
+    iconcoords {524.0 48.0}
+    label {}
+    canvas c1
+}
+
+canvas c1 {
+    name {Canvas1}
+}
+
+option global {
+    interface_names no
+    ip_addresses yes
+    ipv6_addresses yes
+    node_labels yes
+    link_labels yes
+    show_api no
+    background_images no
+    annotations yes
+    grid yes
+    traffic_start 0
+}
+
+option session {
+}
+
